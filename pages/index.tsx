@@ -1,10 +1,7 @@
 import { FC } from "react";
 import Head from "next/head";
 
-import TeamMember from "../components/TeamMember";
 import Standup from "../components/Standup";
-
-const team = ["Chris", "Jan", "Noey", "Oo", "Pin"];
 
 const Home: FC = () => {
   return (
@@ -18,9 +15,6 @@ const Home: FC = () => {
         <h1 className="text-6xl font-bold mb-3">
           <span className="text-blue">Core Platform Standup 🙋</span>
         </h1>
-
-        <p className="mt-3 mb-8 text-2xl">Our team (in alphabetical order):</p>
-
         <Standup />
       </main>
     </div>

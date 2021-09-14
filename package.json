@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.4",
     "@types/lodash": "^4.14.172",
     "lodash": "^4.17.21",
     "next": "latest",
