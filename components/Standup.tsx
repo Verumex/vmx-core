@@ -2,6 +2,8 @@ import React, { FC, useState } from "react";
 import { useTransition, animated } from "@react-spring/web";
 import shuffle from "lodash/shuffle";
 import { RefreshIcon } from "@heroicons/react/outline";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 const width = 200;
 
@@ -36,6 +38,8 @@ const data = [
 const Standup: FC = () => {
   const [items, setItems] = useState(data);
   const [isShuffled, setIsShuffled] = useState(false);
+  const [isConfettiOn, setIsConfettiOn] = useState(false);
+  const { width: windowWidth, height: windowHeight } = useWindowSize();
 
   let width = 0;
 
@@ -56,6 +60,7 @@ const Standup: FC = () => {
   const shuffleItems = () => {
     setItems(shuffle);
     setIsShuffled(true);
+    setIsConfettiOn(true);
   };
 
   return (
@@ -89,6 +94,16 @@ const Standup: FC = () => {
       >
         <RefreshIcon className="h-8 w-8" aria-hidden="true" />
       </button>
+      {isConfettiOn && (
+        <Confetti
+          width={windowWidth}
+          height={windowHeight}
+          recycle={false}
+          numberOfPieces={500}
+          gravity={0.15}
+          onConfettiComplete={() => setIsConfettiOn(false)}
+        />
+      )}
     </div>
   );
 };
