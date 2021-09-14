@@ -2,6 +2,7 @@ import { FC } from "react";
 import Head from "next/head";
 
 import TeamMember from "../components/TeamMember";
+import Standup from "../components/Standup";
 
 const team = ["Chris", "Jan", "Noey", "Oo", "Pin"];
 
@@ -20,11 +21,7 @@ const Home: FC = () => {
 
         <p className="mt-3 mb-8 text-2xl">Our team (in alphabetical order):</p>
 
-        <p>
-          {team.map((name) => (
-            <TeamMember name={name} />
-          ))}
-        </p>
+        <Standup />
       </main>
     </div>
   );
