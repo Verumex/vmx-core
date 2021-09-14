@@ -59,9 +59,9 @@ const Standup: FC = () => {
   };
 
   return (
-    <>
-      <p className="mt-3 mb-8 text-2xl">
-        Our team (in {isShuffled ? "standup" : "alphabetical"} order):
+    <div className="mb-20">
+      <p className="mt-3 mb-8 text-2xl text-gray-500">
+        Our team in {isShuffled ? "standup" : "alphabetical"} order:
       </p>
       <div className="relative h-40" style={{ width }}>
         {transitions((style, item, _, index) => (
@@ -89,7 +89,7 @@ const Standup: FC = () => {
       >
         <RefreshIcon className="h-8 w-8" aria-hidden="true" />
       </button>
-    </>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import { FC } from "react";
 import Head from "next/head";
 
 import Standup from "../components/Standup";
+import Format from "../components/Format";
 
 const Home: FC = () => {
   return (
@@ -16,6 +17,7 @@ const Home: FC = () => {
           <span className="text-blue">Core Platform Standup 🙋</span>
         </h1>
         <Standup />
+        <Format />
       </main>
     </div>
   );
