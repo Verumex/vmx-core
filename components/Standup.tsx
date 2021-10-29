@@ -14,7 +14,7 @@ const data = [
     width,
   },
   {
-    name: "Francois",
+    name: "François",
     css: "linear-gradient(135deg, #E3FDF5 0%, #FFE6FA 100%)",
     width,
   },
