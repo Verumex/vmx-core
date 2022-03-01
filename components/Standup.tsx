@@ -2,63 +2,30 @@ import React, { FC, useState } from "react";
 import { useTransition, animated } from "@react-spring/web";
 import shuffle from "lodash/shuffle";
 import { RefreshIcon } from "@heroicons/react/outline";
-import useWindowSize from "react-use/lib/useWindowSize";
-import Confetti from "react-confetti";
 
-const width = 200;
-
-const data = [
-  {
-    name: "Chris",
-    css: "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)",
-    width,
-  },
-  {
-    name: "François",
-    css: "linear-gradient(135deg, #E3FDF5 0%, #FFE6FA 100%)",
-    width,
-  },
-  {
-    name: "Jan",
-    css: "linear-gradient(135deg, #ed6fbb 0%, #ff9378 100%)",
-    width,
-  },
-  {
-    name: "Noey",
-    css: "linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)",
-    width,
-  },
-  {
-    name: "Oo",
-    css: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)",
-    width,
-  },
-  {
-    name: "Pin",
-    css: "linear-gradient(to top, #96fbc4 0%, #f9f586 100%)",
-    width,
-  },
-];
+import { team, Member } from "./team";
+import Confetti from "./Confetti";
+import { classNames } from "../utils";
 
 const Standup: FC = () => {
-  const [items, setItems] = useState(data);
+  const [items, setItems] = useState<Member[]>(team);
+  const [activeMember, setActiveMember] = useState<Member | undefined>();
   const [isShuffled, setIsShuffled] = useState(false);
   const [isConfettiOn, setIsConfettiOn] = useState(false);
-  const { width: windowWidth, height: windowHeight } = useWindowSize();
 
   let width = 0;
 
   const transitions = useTransition(
-    items.map((data) => ({
-      ...data,
-      x: (width += data.width) - data.width,
+    items.map((item) => ({
+      ...item,
+      x: (width += item.cardWidth) - item.cardWidth,
     })),
     {
-      key: (person: any) => person.name,
+      key: (item: Member) => item.name,
       from: { opacity: 0 },
       leave: { opacity: 0 },
-      enter: ({ x, width }) => ({ x, width, opacity: 1 }),
-      update: ({ x, width }) => ({ x, width }),
+      enter: (item) => ({ x: item.x, width: item.cardWidth, opacity: 1 }),
+      update: (item) => ({ x: item.x, width: item.cardWidth }),
     }
   );
 
@@ -66,6 +33,7 @@ const Standup: FC = () => {
     setItems(shuffle);
     setIsShuffled(true);
     setIsConfettiOn(true);
+    setActiveMember(undefined);
   };
 
   return (
@@ -74,18 +42,22 @@ const Standup: FC = () => {
         Our team in {isShuffled ? "standup" : "alphabetical"} order:
       </p>
       <div className="relative h-40" style={{ width }}>
-        {transitions((style, item, _, index) => (
+        {transitions((style, member, _, index) => (
           <animated.div
-            className="absolute"
-            style={{ zIndex: data.length - index, ...style }}
+            className="absolute cursor-pointer"
+            style={{ zIndex: team.length - index, ...style }}
+            onClick={() => setActiveMember(member)}
           >
-            <div className="relative p-4 bg-cover">
+            <div className="relative p-5 bg-cover">
               <div
-                className="relative flex justify-center items-center bottom-0 left-0 w-full rounded-md shadow-md h-20"
-                style={{ backgroundImage: item.css }}
+                className={classNames(
+                  "relative flex justify-center items-center bottom-0 left-0 w-full rounded-md shadow-md h-20 ease-in-out duration-300",
+                  member.name === activeMember?.name && "scale-125"
+                )}
+                style={{ backgroundImage: member.css }}
               >
                 <p className="text-lg text-gray-700 font-bold drop-shadow-lg">
-                  {item.name}
+                  {member.name}
                 </p>
               </div>
             </div>
@@ -99,16 +71,10 @@ const Standup: FC = () => {
       >
         <RefreshIcon className="h-8 w-8" aria-hidden="true" />
       </button>
-      {isConfettiOn && (
-        <Confetti
-          width={windowWidth}
-          height={windowHeight}
-          recycle={false}
-          numberOfPieces={500}
-          gravity={0.15}
-          onConfettiComplete={() => setIsConfettiOn(false)}
-        />
-      )}
+      <Confetti
+        isConfettiOn={isConfettiOn}
+        callback={() => setIsConfettiOn(false)}
+      />
     </div>
   );
 };
