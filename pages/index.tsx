@@ -13,7 +13,7 @@ const Home: FC = () => {
       </Head>
 
       <main className="flex flex-col items-center justify-center text-gray-700 w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold mb-3">
+        <h1 className="text-5xl font-bold mb-3">
           <span className="text-blue">Core Platform Standup 🙋</span>
         </h1>
         <Standup />

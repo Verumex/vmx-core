@@ -10,6 +10,9 @@ module.exports = {
           DEFAULT: "#0c2340",
         },
       },
+      fontSize: {
+        "10xl": "10rem",
+      },
     },
   },
   variants: {
