@@ -1,16 +1,19 @@
-import React, { FC, useState } from "react";
-import { useTransition, animated } from "@react-spring/web";
-import shuffle from "lodash/shuffle";
 import { RefreshIcon } from "@heroicons/react/outline";
+import { animated, useTransition } from "@react-spring/web";
+import shuffle from "lodash/shuffle";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 
-import { team, Member } from "./team";
-import Confetti from "./Confetti";
 import { classNames } from "../utils";
 import BigTimer from "./BigTimer";
+import { Member, team } from "./team";
 
 const timeInMinutes = 3;
 
-const Standup: FC = () => {
+interface Props {
+  letItSnow: Dispatch<SetStateAction<boolean>>;
+}
+
+const Standup: FC<Props> = ({ letItSnow }) => {
   const [items, setItems] = useState<Member[]>(team);
   const [activeMember, setActiveMember] = useState<Member | undefined>();
   const [isShuffled, setIsShuffled] = useState(false);
@@ -35,12 +38,11 @@ const Standup: FC = () => {
   const shuffleItems = () => {
     setItems(shuffle);
     setIsShuffled(true);
-    setIsConfettiOn(true);
+    letItSnow(true);
     setActiveMember(undefined);
   };
 
   const activateMember = (member: Member) => {
-    setIsConfettiOn(false);
     setActiveMember(member);
   };
 
@@ -85,10 +87,6 @@ const Standup: FC = () => {
       >
         <RefreshIcon className="h-8 w-8" aria-hidden="true" />
       </button>
-      <Confetti
-        isConfettiOn={isConfettiOn}
-        callback={() => setIsConfettiOn(false)}
-      />
     </div>
   );
 };
