@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import Countdown, { zeroPad, CountdownRenderProps } from "react-countdown";
+import { FC } from "react";
+import Countdown, { CountdownRenderProps, zeroPad } from "react-countdown";
 
 import { classNames } from "../utils";
 
@@ -7,7 +7,6 @@ const renderer = ({ minutes, seconds, total }: CountdownRenderProps) => {
   const threshold = 30000; // milliseconds
 
   const timeLeft = `${minutes}:${zeroPad(seconds)}`;
-  document.title = `${timeLeft} - Core Platform Standup`;
 
   return (
     <div

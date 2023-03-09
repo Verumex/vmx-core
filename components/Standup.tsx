@@ -1,12 +1,12 @@
-import React, { FC, useState } from "react";
-import { useTransition, animated } from "@react-spring/web";
-import shuffle from "lodash/shuffle";
 import { RefreshIcon } from "@heroicons/react/outline";
+import { animated, useTransition } from "@react-spring/web";
+import shuffle from "lodash/shuffle";
+import { FC, useEffect, useRef, useState } from "react";
 
-import { team, Member } from "./team";
-import Confetti from "./Confetti";
 import { classNames } from "../utils";
 import BigTimer from "./BigTimer";
+import Confetti from "./Confetti";
+import { Member, team } from "./team";
 
 const timeInMinutes = 3;
 
@@ -15,6 +15,26 @@ const Standup: FC = () => {
   const [activeMember, setActiveMember] = useState<Member | undefined>();
   const [isShuffled, setIsShuffled] = useState(false);
   const [isConfettiOn, setIsConfettiOn] = useState(false);
+
+  /**
+   * We need to set the interval inside a worker. Otherwise the browser
+   * will deprioritize an inactive tab and the interval won't fire as expected.
+   *
+   * Posting an array of team members to the worker triggers the inteval.
+   * Then we listen for its messages to update page title.
+   */
+  const workerRef = useRef<Worker>();
+
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL("../page-title-worker.ts", import.meta.url)
+    );
+    workerRef.current.onmessage = (event: MessageEvent<string>) =>
+      (document.title = event.data);
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
 
   let width = 0;
 
@@ -33,10 +53,16 @@ const Standup: FC = () => {
   );
 
   const shuffleItems = () => {
-    setItems(shuffle);
-    setIsShuffled(true);
-    setIsConfettiOn(true);
-    setActiveMember(undefined);
+    setItems((items) => {
+      const shuffledItems = shuffle(items);
+      workerRef.current?.postMessage(shuffledItems);
+
+      setIsShuffled(true);
+      setIsConfettiOn(true);
+      setActiveMember(undefined);
+
+      return shuffledItems;
+    });
   };
 
   const activateMember = (member: Member) => {

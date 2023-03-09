@@ -1,8 +1,8 @@
-import { FC } from "react";
 import Head from "next/head";
+import { FC } from "react";
 
-import Standup from "../components/Standup";
 import Format from "../components/Format";
+import Standup from "../components/Standup";
 
 const Home: FC = () => {
   return (
