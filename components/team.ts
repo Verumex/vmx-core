@@ -23,6 +23,11 @@ export const team: Member[] = [
     cardWidth,
   },
   {
+    name: "Mihai",
+    css: "linear-gradient(135deg, #b3e5fc 0%, #4fc3f7 100%)",
+    cardWidth,
+  },
+  {
     name: "Noey",
     css: "linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)",
     cardWidth,
