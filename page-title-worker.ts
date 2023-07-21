@@ -1,4 +1,4 @@
-import { Member } from "./components/team";
+import { MemberCardDetails } from "./components/teams";
 
 const numberEmoji: Record<number, string> = {
   1: "1️⃣",
@@ -15,7 +15,7 @@ const numberEmoji: Record<number, string> = {
 
 let interval: NodeJS.Timer;
 
-addEventListener("message", (event: MessageEvent<Member[]>) => {
+addEventListener("message", (event: MessageEvent<MemberCardDetails[]>) => {
   let count = 0;
   clearInterval(interval);
 

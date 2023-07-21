@@ -6,13 +6,18 @@ import { FC, useEffect, useRef, useState } from "react";
 import { classNames } from "../utils";
 import BigTimer from "./BigTimer";
 import Confetti from "./Confetti";
-import { Member, team } from "./team";
+import { MemberCardDetails, memberCardDetails } from "./teams";
 
 const timeInMinutes = 3;
+const cardWidth = 170;
 
-const Standup: FC = () => {
-  const [items, setItems] = useState<Member[]>(team);
-  const [activeMember, setActiveMember] = useState<Member | undefined>();
+interface Props {
+  members: string[];
+}
+
+const Standup: FC<Props> = ({ members }) => {
+  const [items, setItems] = useState<MemberCardDetails[]>(memberCardDetails(members));
+  const [activeMember, setActiveMember] = useState<MemberCardDetails | undefined>();
   const [isShuffled, setIsShuffled] = useState(false);
   const [isConfettiOn, setIsConfettiOn] = useState(false);
 
@@ -26,9 +31,7 @@ const Standup: FC = () => {
   const workerRef = useRef<Worker>();
 
   useEffect(() => {
-    workerRef.current = new Worker(
-      new URL("../page-title-worker.ts", import.meta.url)
-    );
+    workerRef.current = new Worker(new URL("../page-title-worker.ts", import.meta.url));
     workerRef.current.onmessage = (event: MessageEvent<string>) =>
       (document.title = event.data);
     return () => {
@@ -41,14 +44,14 @@ const Standup: FC = () => {
   const transitions = useTransition(
     items.map((item) => ({
       ...item,
-      x: (width += item.cardWidth) - item.cardWidth,
+      x: (width += cardWidth) - cardWidth,
     })),
     {
-      key: (item: Member) => item.name,
+      key: (item: MemberCardDetails) => item.name,
       from: { opacity: 0 },
       leave: { opacity: 0 },
-      enter: (item) => ({ x: item.x, width: item.cardWidth, opacity: 1 }),
-      update: (item) => ({ x: item.x, width: item.cardWidth }),
+      enter: (item) => ({ x: item.x, width: cardWidth, opacity: 1 }),
+      update: (item) => ({ x: item.x, width: cardWidth }),
     }
   );
 
@@ -65,7 +68,7 @@ const Standup: FC = () => {
     });
   };
 
-  const activateMember = (member: Member) => {
+  const activateMember = (member: MemberCardDetails) => {
     setIsConfettiOn(false);
     setActiveMember(member);
   };
@@ -85,7 +88,7 @@ const Standup: FC = () => {
         {transitions((style, member, _, index) => (
           <animated.div
             className="absolute cursor-pointer"
-            style={{ zIndex: team.length - index, ...style }}
+            style={{ zIndex: items.length - index, ...style }}
             onClick={() => activateMember(member)}
           >
             <div className="relative p-5 bg-cover">
@@ -111,10 +114,7 @@ const Standup: FC = () => {
       >
         <RefreshIcon className="h-8 w-8" aria-hidden="true" />
       </button>
-      <Confetti
-        isConfettiOn={isConfettiOn}
-        callback={() => setIsConfettiOn(false)}
-      />
+      <Confetti isConfettiOn={isConfettiOn} callback={() => setIsConfettiOn(false)} />
     </div>
   );
 };

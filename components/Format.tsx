@@ -1,5 +1,7 @@
 import { LightBulbIcon } from "@heroicons/react/solid";
 
+import { classNames } from "../utils";
+
 const steps = [
   {
     name: "What did I work on since our last standup?",
@@ -11,8 +13,6 @@ const steps = [
     name: "What issues are blocking me?",
   },
 ];
-
-const classNames = (...classes: string[]) => classes.filter(Boolean).join(" ");
 
 const Format = () => {
   return (
