@@ -12,6 +12,9 @@ const steps = [
   {
     name: "What issues are blocking me?",
   },
+  {
+    name: "Any Sentry issues to review?",
+  },
 ];
 
 const Format = () => {
@@ -21,10 +24,7 @@ const Format = () => {
         {steps.map((step, stepIdx) => (
           <li
             key={step.name}
-            className={classNames(
-              stepIdx !== steps.length - 1 ? "pb-10" : "",
-              "relative"
-            )}
+            className={classNames(stepIdx !== steps.length - 1 ? "pb-5" : "", "relative")}
           >
             <>
               {stepIdx !== steps.length - 1 ? (
